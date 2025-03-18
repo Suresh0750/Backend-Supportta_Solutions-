@@ -1,0 +1,13 @@
+import express from "express";
+import { userController } from "@/DIP/user.dip"; 
+import { loginValidator } from "@/middleware/validators/user/loginValidators";
+import { signupValidator } from "@/middleware/validators/user/signupValidators";
+import { upload } from "@/middleware/multer";
+
+const userRouter = express.Router()
+
+
+userRouter.post('/login',loginValidator,userController.userLogin.bind(userController))
+userRouter.post('/signup',signupValidator,upload.single('profilePhoto'),userController.userLogin.bind(userController))
+
+export default userRouter
