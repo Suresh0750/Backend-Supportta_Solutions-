@@ -8,11 +8,9 @@ import { Role } from "@/utils/constants"
 import { ValidationError } from "@/shared/CustomError"
 import mongoose from "mongoose"
 import { JwtPayload } from "jsonwebtoken"
+import { AuthenticatedRequest } from "@/shared/CustomeRequest"
 
 
-export interface UserRequest extends Request {
-    user?: JwtPayload;
-  }
 
 export default class UserController{
     private userService : UserServices
@@ -48,7 +46,7 @@ export default class UserController{
             next(error)
         }
     }
-    async toggleBlockUser(req:UserRequest,res:Response,next:NextFunction):Promise<void>{
+    async toggleBlockUser(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try {
             const targetUserId = req.params.blockUserId; 
             const userId = req?.user?._id; 

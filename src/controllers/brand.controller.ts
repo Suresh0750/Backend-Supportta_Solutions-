@@ -1,5 +1,9 @@
 import BrandService from "@/services/brand.services";
+import { SuccessResponse } from "@/shared/ApiResponse";
+import { ValidationError } from "@/shared/CustomError";
+import { HttpStatus } from "@/shared/HttpStatusCode";
 import {Request,Response, NextFunction } from "express";
+import { AuthenticatedRequest } from "@/shared/CustomeRequest";
 
 
 
@@ -8,12 +12,23 @@ export default class BrandController{
     constructor(brandService:BrandService){
         this.brandService = brandService
     }
-    async createBrend(req:Request,res:Response,next:NextFunction):Promise<void>{
+    async createBrand(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try{
             await this.brandService.createBrand(req.body)
+            SuccessResponse(res,HttpStatus.Success,"New brand added successfully")
         }catch(error){
-            console.log(error)
+            console.error(error)
             next(error)
         }
     }
-}
+    async getBrand(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
+        try {
+            if(!req.params.categories) throw new ValidationError('categories is missing')
+            const brandData = await this.brandService.getBrand(req.params.categories)
+            SuccessResponse(res,HttpStatus.Success,"Successfully retrieved brand details",brandData)
+        } catch (error) {
+            console.error(error)
+            next(error)
+        }
+    }
+}   

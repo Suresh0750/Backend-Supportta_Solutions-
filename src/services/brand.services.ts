@@ -8,9 +8,17 @@ export default class BrandService{
     constructor(brandRepository: BrandRepository){
         this.brandRepository = brandRepository
     }
-    async createBrand(data:IBrand){
+    async createBrand(data:IBrand):Promise<void>{
         try {
             await this.brandRepository.exec(data)
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+    }
+    async getBrand(categories:string):Promise<IBrand[]|undefined>{
+        try {
+            return this.brandRepository.fecthBrand(categories)
         } catch (error) {
             console.error(error)
             throw error

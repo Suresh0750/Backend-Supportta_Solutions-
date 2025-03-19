@@ -23,3 +23,8 @@ export const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET!
 export enum Role {
     User = 'User'
 }
+
+export enum Token {
+    AccessToken = "accessToken",
+    RefreshToken = "refreshToken"
+}

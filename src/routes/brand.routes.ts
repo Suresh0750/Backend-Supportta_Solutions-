@@ -1,9 +1,17 @@
 
 import { Router } from "express";
 import { brandController } from "@/DIP/brand.dip";
+import authenticateToken from "@/middleware/authenticateToken";
+import { authorizeRole } from "@/middleware/roleMiddleware";
+import { Role } from "@/utils/constants";
+import { validateBrand } from "@/middleware/validators/brandValidation";
+
+
+
 const brandRouter = Router()
 
-brandRouter.post('/create',brandController.createBrend.bind(brandController))
+brandRouter.post('/create',authenticateToken,authorizeRole([Role.User]),validateBrand,brandController.createBrand.bind(brandController))
+brandRouter.get('/list/:categories',authenticateToken,authorizeRole([Role.User]),brandController.getBrand.bind(brandController))
 
 
 export default brandRouter
