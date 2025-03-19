@@ -8,6 +8,7 @@ const userRouter = express.Router()
 
 
 userRouter.post('/login',loginValidator,userController.userLogin.bind(userController))
-userRouter.post('/signup',signupValidator,upload.single('profilePhoto'),userController.userLogin.bind(userController))
+userRouter.post('/signup',upload.single('profilePhoto'),signupValidator,userController.userSignup.bind(userController))
+userRouter.patch('/toggle-block/:blockUserId',userController.toggleBlockUser.bind(userController))
 
 export default userRouter

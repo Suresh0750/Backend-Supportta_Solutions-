@@ -10,11 +10,11 @@ export interface IUser extends Document {
   blockedUsers: Types.ObjectId[]; 
 }
 
-const userSchema = new Schema<IUser>({
-  username: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  profilePhoto: { type: String },
+const userSchema = new Schema<IUser>({  
+  username: { type: String, required: true ,trim:true},
+  email: { type: String, unique: true, required: true ,trim:true},
+  password: { type: String, required: true,trim:true},
+  profilePhoto: { type: String ,trim:true},
   blockedUsers: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true });
 

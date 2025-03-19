@@ -13,7 +13,7 @@ export class AppError extends Error {
     }
 }
 
-// Global Error Handler Middleware
+// * Global Error Handler Middleware
 export const errorHandler = (err: AppError, req: Request, res: Response, next: NextFunction) => {
     console.error("Error: ", err.message);
 
@@ -22,4 +22,5 @@ export const errorHandler = (err: AppError, req: Request, res: Response, next: N
         message: err.message,
         statusCode: err.statusCode || HttpStatus.InternalServerError
     });
+
 };

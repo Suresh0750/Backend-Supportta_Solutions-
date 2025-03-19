@@ -5,6 +5,14 @@ import { NextFunction,Request,Response } from "express"
 import { SuccessResponse } from "@/shared/ApiResponse"
 import { HttpStatus } from "@/shared/HttpStatusCode"
 import { Role } from "@/utils/constants"
+import { ValidationError } from "@/shared/CustomError"
+import mongoose from "mongoose"
+import { JwtPayload } from "jsonwebtoken"
+
+
+export interface UserRequest extends Request {
+    user?: JwtPayload;
+  }
 
 export default class UserController{
     private userService : UserServices
@@ -39,5 +47,24 @@ export default class UserController{
             console.error(error)
             next(error)
         }
+    }
+    async toggleBlockUser(req:UserRequest,res:Response,next:NextFunction):Promise<void>{
+        try {
+            const targetUserId = req.params.blockUserId; 
+            const userId = req?.user?._id; 
+        
+            if (!targetUserId) {
+                throw new ValidationError('Target user ID is required')
+            }
+        
+            const updatedUser = await this.userService.toggleBlockUser(userId, targetUserId);
+            const targetObjectId = new mongoose.Types.ObjectId(targetUserId);
+            const isNowBlocked = updatedUser.blockedUsers.includes(targetObjectId);
+            const message = isNowBlocked ? 'User blocked successfully' : 'User unblocked successfully';
+            SuccessResponse(res,HttpStatus.Success,message)
+          } catch (error) {
+            console.error(error)
+            next(error);
+          }
     }
 }

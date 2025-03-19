@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-interface IBrand extends Document {
+export interface IBrand extends Document {
   brandName: string;
   brandLogo?: string;
   categories: string[];

@@ -1,10 +1,12 @@
 
 import { IUser } from "@/models/user.model"
 import UserRepository from "@/repositories/entities/userRepository/user.repository"
-import { AuthenticationError, ValidationError } from "@/shared/CustomError"
+import { AuthenticationError, NotFoundError, ValidationError } from "@/shared/CustomError"
 import { uploadToCloudinary } from "@/utils/cloudinaryHelper"
+import mongoose, { Types } from "mongoose"
 import bcrypt from "node_modules/bcryptjs"
 
+const ObjectId = Types.ObjectId
 export default class UserServices{
     private userRepository : UserRepository
     constructor (userRepository:UserRepository){
@@ -12,7 +14,7 @@ export default class UserServices{
     }
 
     //*  Hash data (like password)
-    protected async hashData(data: string): Promise<string> {
+    protected async hashPassword(data: string): Promise<string> {
         const salt = await bcrypt.genSalt(10);
         return bcrypt.hash(data, salt);
     }
@@ -25,12 +27,13 @@ export default class UserServices{
     // * user login logic
     async userLogin(email:string,password:string) : Promise<IUser>{
         try {
+
         const findUser:IUser | null = await this.userRepository.findByEmail(email)
         if(!findUser){
             throw new AuthenticationError('Email Not Found')
         }
         
-        const isCheckPassword = await this.comparePassword(findUser.password,password)
+        const isCheckPassword = await this.comparePassword(password,findUser.password)
 
         if(!isCheckPassword){
             throw new AuthenticationError('Password Invalid')
@@ -53,10 +56,35 @@ export default class UserServices{
                 profilePhoto = await uploadToCloudinary(data?.profilePhoto as  Express.Multer.File) ;
                 console.log(profilePhoto,'profilePhoto')
             }
+            data.password = await this.hashPassword(data.password)
             return await this.userRepository.createData('UserModel',{...data,profilePhoto})
         } catch (error:unknown) {
             console.error(error)
             throw error
         }
     }
+    async toggleBlockUser(userId: string, targetUserId: string): Promise<IUser> {
+        try{
+        
+            const user = await this.userRepository.findById('UserModel',userId)
+            if (!user) throw new NotFoundError('User not found');
+            const targetObjectId = new mongoose.Types.ObjectId(targetUserId);
+            const isBlocked = user.blockedUsers.includes(targetObjectId);
+        
+            if (isBlocked) {
+            // * Unblock user 
+            user.blockedUsers = user.blockedUsers.filter(id => id.toString() !== targetUserId);
+            } else {
+            // * Block user 
+            user.blockedUsers.push(targetObjectId);
+            }
+        
+            await this.userRepository.updateById('UserModel',userId,user)
+            return user
+
+        } catch (error:unknown) {
+            console.error(error)
+            throw error
+        }
+      }
 }   
