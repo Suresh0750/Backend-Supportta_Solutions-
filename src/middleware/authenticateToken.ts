@@ -6,13 +6,10 @@ import { Token } from '../utils/constants';
 import { HttpStatus } from '@/shared/HttpStatusCode';
 
 const authenticateToken = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<any> => {
-    console.log('Auth middleware entered');
 
     const accessToken = req.cookies[Token.AccessToken];
     const refreshToken = req.cookies[Token.RefreshToken];
 
-    console.log('Cookies received:', req.cookies);
-    console.log('Access Token:', accessToken);
 
     if (!accessToken) {
         return res.status(HttpStatus.Unauthorized).json({ failToken: true, message: 'No access token provided' });
@@ -20,7 +17,7 @@ const authenticateToken = async (req: AuthenticatedRequest, res: Response, next:
 
     try {
         // * Verify Access Token
-        const accessPayload = jwt.verify(accessToken, JWT_SECRET as string) as AuthenticatedRequest['user'];
+        const accessPayload = await jwt.verify(accessToken, JWT_SECRET as string) as AuthenticatedRequest['user'];
 
         // * Attach payload to request and proceed
         req.user = accessPayload;
@@ -36,8 +33,8 @@ const authenticateToken = async (req: AuthenticatedRequest, res: Response, next:
 
             try {
                 // * Verify Refresh Token
-                const refreshPayload = jwt.verify(refreshToken, JWT_SECRET as string) as AuthenticatedRequest['user'];
-
+                const refreshPayload = await jwt.verify(refreshToken, JWT_SECRET as string) as AuthenticatedRequest['user'];
+                console.log(refreshPayload)
                 if (!refreshPayload) {
                     return res.status(HttpStatus.Unauthorized).json({ message: 'Invalid refresh token. Please log in.' });
                 }
@@ -64,11 +61,11 @@ const authenticateToken = async (req: AuthenticatedRequest, res: Response, next:
             } catch (refreshErr) {
                 if (refreshErr instanceof jwt.TokenExpiredError) {
                     console.log('Refresh token expired');
-                    return res.status(401).json({ message: 'Session expired. Please log in again.' });
+                    return res.status(HttpStatus.Unauthorized).json({ message: 'Session expired. Please log in again.' });
                 }
 
                 console.log('Invalid refresh token');
-                return res.status(401).json({ message: 'Invalid refresh token. Please log in.' });
+                return res.status(HttpStatus.Unauthorized).json({ message: 'Invalid refresh token. Please log in.' });
             }
         }
 

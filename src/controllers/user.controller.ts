@@ -4,8 +4,8 @@ import { JwtService } from "@/integration/jwt"
 import { NextFunction,Request,Response } from "express"
 import { SuccessResponse } from "@/shared/ApiResponse"
 import { HttpStatus } from "@/shared/HttpStatusCode"
-import { Role } from "@/utils/constants"
-import { ValidationError } from "@/shared/CustomError"
+import { Role, Token } from "@/utils/constants"
+import { AuthorizationError, ValidationError } from "@/shared/CustomError"
 import mongoose from "mongoose"
 import { JwtPayload } from "jsonwebtoken"
 import { AuthenticatedRequest } from "@/shared/CustomeRequest"
@@ -25,7 +25,7 @@ export default class UserController{
                 const findUser = await this.userService.userLogin(email,password)
                 console.log(findUser)
                 const accessToken = await this.jwtService.createToken(findUser,Role.User)
-                const refreshToken = await this.jwtService.createToken(findUser,Role.User)
+                const refreshToken = await this.jwtService.createRefreshToken(findUser,Role.User)
 
                 SuccessResponse(res,HttpStatus.Success,'User Successfully verified',findUser,accessToken,refreshToken)
             } catch (error:unknown) {
@@ -49,18 +49,34 @@ export default class UserController{
     async toggleBlockUser(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try {
             const targetUserId = req.params.blockUserId; 
-            const userId = req?.user?._id; 
-        
+            const {user} :any = req.user
+             console.log(user,'user userID')
             if (!targetUserId) {
                 throw new ValidationError('Target user ID is required')
             }
+            // console.log()
+            if(user?._id==targetUserId) throw new AuthorizationError("Forbidden: You cannot perform this action on yourself.")
         
-            const updatedUser = await this.userService.toggleBlockUser(userId, targetUserId);
+            const updatedUser = await this.userService.toggleBlockUser(user?._id, targetUserId);
             const targetObjectId = new mongoose.Types.ObjectId(targetUserId);
             const isNowBlocked = updatedUser.blockedUsers.includes(targetObjectId);
             const message = isNowBlocked ? 'User blocked successfully' : 'User unblocked successfully';
             SuccessResponse(res,HttpStatus.Success,message)
-          } catch (error) {
+          } catch (error:unknown) {
+            console.error(error)
+            next(error);
+          }
+    }
+    async renewAccessToken(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
+        try {
+            const refreshToken = req.cookies[Token.RefreshToken]
+            if(!refreshToken) throw new ValidationError("Refresh token is required")
+            const decoded = await this.jwtService.verifyToken(refreshToken) 
+            if(!decoded) throw new AuthorizationError("Invalid token")
+            
+            console.log(decoded,'decoded')
+
+        } catch (error:unknown) {
             console.error(error)
             next(error);
           }

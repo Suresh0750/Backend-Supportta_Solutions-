@@ -1,5 +1,6 @@
 import { IBrand } from "@/models/brand.model";
 import BrandRepository from "@/repositories/entities/userRepository/brand.repository";
+import { uploadToCloudinary } from "@/utils/cloudinaryHelper";
 
 
 
@@ -10,6 +11,10 @@ export default class BrandService{
     }
     async createBrand(data:IBrand):Promise<void>{
         try {
+            const brandLogo = await uploadToCloudinary(data?.brandLogo as  Express.Multer.File)
+            data.brandLogo = brandLogo
+            // data.categories = 
+            console.log(data)
             await this.brandRepository.exec(data)
         } catch (error) {
             console.error(error)
@@ -18,7 +23,7 @@ export default class BrandService{
     }
     async getBrand(categories:string):Promise<IBrand[]|undefined>{
         try {
-            return this.brandRepository.fecthBrand(categories)
+            return await this.brandRepository.fecthBrand(categories)
         } catch (error) {
             console.error(error)
             throw error

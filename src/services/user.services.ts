@@ -67,6 +67,7 @@ export default class UserServices{
         try{
         
             const user = await this.userRepository.findById('UserModel',userId)
+            console.log(user,'user',userId)
             if (!user) throw new NotFoundError('User not found');
             const targetObjectId = new mongoose.Types.ObjectId(targetUserId);
             const isBlocked = user.blockedUsers.includes(targetObjectId);

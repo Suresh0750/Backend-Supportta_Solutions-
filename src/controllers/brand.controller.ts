@@ -14,7 +14,7 @@ export default class BrandController{
     }
     async createBrand(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try{
-            await this.brandService.createBrand(req.body)
+            await this.brandService.createBrand({...req.body,brandLogo:req?.file})
             SuccessResponse(res,HttpStatus.Success,"New brand added successfully")
         }catch(error){
             console.error(error)

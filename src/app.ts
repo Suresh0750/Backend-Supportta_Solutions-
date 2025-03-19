@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import userRouter from "./routes/user.routes";
 import { errorHandler } from "./middleware/errorHandle.middleware";
 import brandRouter from "./routes/brand.routes"; 
+import productRouter from "./routes/product.routes"; 
 import morgan from 'morgan'
 dotenv.config()
 
@@ -24,7 +25,9 @@ app.use(cookieParser())
 
 app.use('/api/user',userRouter)
 app.use('/api/brand',brandRouter)
+app.use('/api/product',productRouter)
 
-
+// * global errorhandler
 app.use(errorHandler)
+
 export default app;

@@ -16,13 +16,13 @@ export const SuccessResponse = (
   }
 
   if (accessToken && refreshToken) {
-    res
+  return  res
       .status(statusCode)
       .cookie('accessToken', accessToken, { httpOnly: false })
       .cookie('refreshToken', refreshToken, { httpOnly: true })
       .json(response)
   } else {
-    res.status(statusCode).json(response)
+  return  res.status(statusCode).json(response)
   }
 }
 
