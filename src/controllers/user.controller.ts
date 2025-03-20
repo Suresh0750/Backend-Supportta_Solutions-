@@ -52,6 +52,7 @@ export default class UserController{
             if (!targetUserId) {
                 throw new ValidationError('Target user ID is required')
             }
+            if (!user) throw new AuthorizationError("Unauthorized: User authentication required.");
 
             if(user?._id==targetUserId) throw new AuthorizationError("Forbidden: You cannot perform this action on yourself.")
         
@@ -80,5 +81,29 @@ export default class UserController{
             console.error(error)
             next(error);
           }
+    }
+    async updateUser(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
+        try {
+            const {user} :any = req.user
+            if (!user) throw new AuthorizationError("Unauthorized: User authentication required.");
+            const userData = await this.userService.editUser(req.body,user?._id,req?.file)
+            SuccessResponse(res,HttpStatus.Success,'User Successfully update',userData)
+        } catch (error:unknown) {
+            console.error(error)
+            next(error);
+        }
+    }
+    async deleteUser(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
+        try {
+            const {user} :any = req.user
+            if (!user) throw new AuthorizationError("Unauthorized: User authentication required.");
+            if (!req.params.userId) throw new ValidationError("User ID is required.");
+
+            await this.userService.deleteUser(req.params?.userId,user?._id)
+            SuccessResponse(res,HttpStatus.Success,'User Account Successfully Deleted')
+        } catch (error:unknown) {
+            console.error(error)
+            next(error);
+        }
     }
 }   

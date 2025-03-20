@@ -1,7 +1,7 @@
 
 import { IUser } from "../models/user.model"
 import UserRepository from "../repositories/entities/userRepository/user.repository"
-import { AuthenticationError, NotFoundError, ValidationError } from "../shared/CustomError"
+import { AuthenticationError, AuthorizationError, NotFoundError, ValidationError } from "../shared/CustomError"
 import { uploadToCloudinary } from "../utils/cloudinaryHelper"
 import mongoose, { Types } from "mongoose"
 import bcrypt from "bcryptjs"
@@ -87,4 +87,34 @@ export default class UserServices{
             throw error
         }
       }
+      async editUser(data: Omit<IUser,'password'>, userId: string,file:Express.Multer.File | undefined): Promise<IUser | null> {
+        try {
+            if (data?._id !== userId) throw new AuthorizationError("You don't have access to update this Details.");
+            
+            if(file){
+                console.log('file',file)
+                data.profilePhoto = await uploadToCloudinary(file as  Express.Multer.File) ;
+            }
+            const existUser = await this.userRepository.findById('UserModel',userId)
+            if(!existUser) throw new NotFoundError(`User doesn't exist`) 
+            return await this.userRepository.updateById('UserModel', userId, data);
+        } catch (error: unknown) {
+            console.error("Error in editUser:", error);
+            throw error;
+        }
+    }
+    
+    async deleteUser(userId: string, requestingUserId: string): Promise<IUser | null> {
+        try {
+            if (userId !== requestingUserId) throw new AuthorizationError("You don't have access to delete this Details.");
+            
+            const existUser = await this.userRepository.findById('UserModel',userId)
+            if(!existUser) throw new NotFoundError(`User doesn't exist`)
+            return await this.userRepository.deleteById('UserModel', userId);
+        } catch (error: unknown) {
+            console.error("Error in deleteUser:", error);
+            throw error;
+        }
+    }
+    
 }   

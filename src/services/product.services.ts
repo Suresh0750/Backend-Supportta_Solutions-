@@ -24,6 +24,8 @@ export default class ProductService {
             const existBrand = await this.brandRepository.findOne('BrandModel',{brandName:data.brand})
             if(!existBrand) throw  new ValidationError(`Brand dosn't exist`)  // * check brand exist or not
             if(!existBrand.categories.includes(data.category)) throw new ValidationError(`Category dosn't exist`)
+            const existProduct = await this.productRepository.findOne('ProductModel',{productName:data?.productName})
+            if(existProduct) throw new ValidationError('Product already exist')
             data.addedBy = new Types.ObjectId(data.addedBy)
             await this.productRepository.createData('ProductModel',data)
 
@@ -34,6 +36,7 @@ export default class ProductService {
     }
     async update(data:IProduct,userId:string,productImage : Express.Multer.File | undefined) : Promise<void>{
         try {
+            console.log(data.addedBy,userId,'is id')
             if(String(data.addedBy)!==userId) throw new AuthorizationError('You are not authorized to update this product.')
             if(productImage){
                 data.productImage = await uploadToCloudinary(productImage as  Express.Multer.File)

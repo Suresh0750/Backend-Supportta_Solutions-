@@ -53,6 +53,7 @@ A comprehensive backend application built with Node.js, Express.js, TypeScript, 
 3. Create a `.env` file in the root directory with the following variables:
    ```
    PORT=3000
+   
    ```
 
 4. Run the application
@@ -97,3 +98,4 @@ A comprehensive backend application built with Node.js, Express.js, TypeScript, 
 - List: `GET {{Product_Base_URL}}/filter?price=999&&productName=TitanWatch&&brand=Titan&&category=Watch`
 - Update: `PUT {{Product_Base_URL}}/update`
 - Delete: `DELETE {{Product_Base_URL}}/delete/67dae3efc5492b73ac59c9a7`
+

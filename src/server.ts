@@ -9,5 +9,3 @@ app.listen(PORT,()=>{
     connectDB()
     console.log(`http://localhost:${PORT}`)
 })
-
-

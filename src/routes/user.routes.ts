@@ -14,6 +14,8 @@ userRouter.post('/login',loginValidator,userController.userLogin.bind(userContro
 userRouter.post('/signup',upload.single('profilePhoto'),signupValidator,userController.userSignup.bind(userController))
 userRouter.patch('/toggle-block/:blockUserId',authenticateToken,authorizeRole([Role.User]),userController.toggleBlockUser.bind(userController))
 userRouter.post('/refresh-token',userController.renewAccessToken.bind(userController))
+userRouter.put('/update',upload.single('profilePhoto'),authenticateToken,authorizeRole([Role.User]),userController.updateUser.bind(userController))
+userRouter.delete('/delete/:userId',authenticateToken,authorizeRole([Role.User]),userController.deleteUser.bind(userController))
 
 
 export default userRouter;

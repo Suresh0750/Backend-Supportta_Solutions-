@@ -15,7 +15,7 @@ export default class ProductController{
     async exec(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try {
             await this.productService.create(req.body)
-            SuccessResponse(res,HttpStatus.Success,"New brand added successfully")
+            SuccessResponse(res,HttpStatus.Success,"New Product added successfully")
         } catch (error) {
             console.error(error)
             next(error)
@@ -28,7 +28,7 @@ export default class ProductController{
                 throw new AuthenticationError("Unauthorized: You must be logged in to perform this action.");
             }
             await this.productService.update(req.body,String(user?._id),req?.file)
-            SuccessResponse(res,HttpStatus.Success,"brand updated successfully")
+            SuccessResponse(res,HttpStatus.Success,"Product updated successfully")
         } catch (error) {
             console.error(error)
             next(error)
@@ -64,7 +64,7 @@ export default class ProductController{
                 userId: String(user?._id)
             });
 
-            SuccessResponse(res,HttpStatus.Success,"Brands fetched successfully",productDetails)
+            SuccessResponse(res,HttpStatus.Success,"Product fetched successfully",productDetails)
         } catch (error) {
             console.error(error)
             next(error)

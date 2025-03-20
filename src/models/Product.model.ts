@@ -10,8 +10,8 @@ export interface IProduct extends Document {
   addedBy: Types.ObjectId;
 }
 const productSchema = new Schema<IProduct>({
-  productName: { type: String, required: true },
-  description: { type: String, required: true },
+  productName: { type: String, required: true,unique:true,trim:true},
+  description: { type: String, required: true , trim:true},
   price: { type: Number, required: true },
   category: { type: String, required: true },
   brand: { type: String, ref: 'Brand', required: true },
