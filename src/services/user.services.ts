@@ -54,7 +54,6 @@ export default class UserServices{
             let profilePhoto;
             if (data.profilePhoto) {
                 profilePhoto = await uploadToCloudinary(data?.profilePhoto as  Express.Multer.File) ;
-                console.log(profilePhoto,'profilePhoto')
             }
             data.password = await this.hashPassword(data.password)
             return await this.userRepository.createData('UserModel',{...data,profilePhoto})
@@ -67,7 +66,7 @@ export default class UserServices{
         try{
         
             const user = await this.userRepository.findById('UserModel',userId)
-            console.log(user,'user',userId)
+
             if (!user) throw new NotFoundError('User not found');
             const targetObjectId = new mongoose.Types.ObjectId(targetUserId);
             const isBlocked = user.blockedUsers.includes(targetObjectId);

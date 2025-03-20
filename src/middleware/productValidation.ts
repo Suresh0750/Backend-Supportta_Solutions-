@@ -4,7 +4,6 @@ import { ValidationError } from "@/shared/CustomError";
 
 export const validateProduct = (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log('product validations')
         const { productName, description, price, category, brand, productImage, addedBy } = req.body;
 
     if (!productName || productName.length < 2 || productName.length > 100) {

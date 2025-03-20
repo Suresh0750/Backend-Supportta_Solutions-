@@ -24,30 +24,26 @@ const authenticateToken = async (req: AuthenticatedRequest, res: Response, next:
         return next();
     } catch (err) {
         if (err instanceof jwt.TokenExpiredError) {
-            console.log('Access token expired');
+            // console.log('Access token expired');
 
             if (!refreshToken) {
-                console.log('No refresh token provided');
+                // console.log('No refresh token provided');
                 return res.status(HttpStatus.Unauthorized).json({ failToken: true, message: 'No refresh token provided' });
             }
 
             try {
                 // * Verify Refresh Token
-                const refreshPayload = await jwt.verify(refreshToken, JWT_SECRET as string) as AuthenticatedRequest['user'];
-                console.log(refreshPayload)
+                const refreshPayload = await jwt.verify(refreshToken, JWT_SECRET as string) as AuthenticatedRequest['user'] ;
                 if (!refreshPayload) {
                     return res.status(HttpStatus.Unauthorized).json({ message: 'Invalid refresh token. Please log in.' });
                 }
 
                 // * Generate a new Access Token
                 const newAccessToken = jwt.sign(
-                    { id: refreshPayload.id, role: refreshPayload.role },
+                    { user:refreshPayload?.user, role: refreshPayload.role },
                     JWT_SECRET as string,
                     { expiresIn: '15m' }
                 );
-
-                console.log('New access token generated');
-
                 // * Set new Access Token in cookies
                 res.cookie(Token.AccessToken, newAccessToken, {
                     httpOnly: true,
@@ -60,16 +56,14 @@ const authenticateToken = async (req: AuthenticatedRequest, res: Response, next:
                 return next();
             } catch (refreshErr) {
                 if (refreshErr instanceof jwt.TokenExpiredError) {
-                    console.log('Refresh token expired');
                     return res.status(HttpStatus.Unauthorized).json({ message: 'Session expired. Please log in again.' });
                 }
 
-                console.log('Invalid refresh token');
                 return res.status(HttpStatus.Unauthorized).json({ message: 'Invalid refresh token. Please log in.' });
             }
         }
 
-        console.log('Invalid access token');
+
         return res.status(HttpStatus.BadRequest).json({ message: 'Invalid access token. Please log in.' });
     }
 };

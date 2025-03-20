@@ -23,11 +23,11 @@ export default class ProductController{
     }
     async update(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try {
-            if (!req.user?._id) {
+            const {user} : any = req.user
+            if (!user?._id) {
                 throw new AuthenticationError("Unauthorized: You must be logged in to perform this action.");
             }
-
-            await this.productService.update(req.body,req?.user?._id)
+            await this.productService.update(req.body,String(user?._id),req?.file)
             SuccessResponse(res,HttpStatus.Success,"brand updated successfully")
         } catch (error) {
             console.error(error)
@@ -36,8 +36,8 @@ export default class ProductController{
     }
     async delete(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try {
-            const user = req.user
-            if (!user) {
+            const {user} : any = req.user
+            if (!user?._id) {
                 throw new AuthenticationError("Unauthorized: You must be logged in to perform this action.");
             }
             await this.productService.delete(req.params.productId,user._id)
@@ -49,16 +49,19 @@ export default class ProductController{
     }
     async fetch(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try {
-            if (!req.user?._id) {
+            const {user} : any = req.user
+
+            if (!user?._id) {
                 throw new AuthenticationError("Unauthorized: You must be logged in to perform this action.");
             }
+
             const productDetails = await this.productService.list({
                 price: Number(req.query.price) || 0, 
                 productName: String(req.query.productName || ''), 
                 order: req.query.order === 'des' ? 'des' : 'acc', 
                 brand: String(req.query.brand || ''), 
                 category: String(req.query.category || ''), 
-                userId: String(req.user?._id)
+                userId: String(user?._id)
             });
 
             SuccessResponse(res,HttpStatus.Success,"Brands fetched successfully",productDetails)

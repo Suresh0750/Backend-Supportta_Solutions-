@@ -10,7 +10,6 @@ export function loginValidator(
 ) {
   try {
     const { email, password } = req.body;
-    console.log()
 
     if (!email) throw new ValidationError("Email is required");
     if (!validator.isEmail(email)) throw new ValidationError("Invalid email format");

@@ -23,7 +23,6 @@ export default class UserController{
             try {
                 const {email,password} = req.body
                 const findUser = await this.userService.userLogin(email,password)
-                console.log(findUser)
                 const accessToken = await this.jwtService.createToken(findUser,Role.User)
                 const refreshToken = await this.jwtService.createRefreshToken(findUser,Role.User)
 
@@ -50,11 +49,11 @@ export default class UserController{
         try {
             const targetUserId = req.params.blockUserId; 
             const {user} :any = req.user
-             console.log(user,'user userID')
+
             if (!targetUserId) {
                 throw new ValidationError('Target user ID is required')
             }
-            // console.log()
+
             if(user?._id==targetUserId) throw new AuthorizationError("Forbidden: You cannot perform this action on yourself.")
         
             const updatedUser = await this.userService.toggleBlockUser(user?._id, targetUserId);
@@ -70,15 +69,17 @@ export default class UserController{
     async renewAccessToken(req:AuthenticatedRequest,res:Response,next:NextFunction):Promise<void>{
         try {
             const refreshToken = req.cookies[Token.RefreshToken]
+
             if(!refreshToken) throw new ValidationError("Refresh token is required")
             const decoded = await this.jwtService.verifyToken(refreshToken) 
             if(!decoded) throw new AuthorizationError("Invalid token")
-            
-            console.log(decoded,'decoded')
 
+            const accessToken = await this.jwtService.createToken(decoded?.user,Role.User)
+
+            SuccessResponse(res,HttpStatus.Success,'User Successfully verified','',accessToken,refreshToken)
         } catch (error:unknown) {
             console.error(error)
             next(error);
           }
     }
-}
+}   

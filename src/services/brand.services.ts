@@ -13,8 +13,6 @@ export default class BrandService{
         try {
             const brandLogo = await uploadToCloudinary(data?.brandLogo as  Express.Multer.File)
             data.brandLogo = brandLogo
-            // data.categories = 
-            console.log(data)
             await this.brandRepository.exec(data)
         } catch (error) {
             console.error(error)

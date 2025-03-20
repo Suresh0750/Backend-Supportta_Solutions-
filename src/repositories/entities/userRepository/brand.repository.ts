@@ -22,7 +22,6 @@ export default class BrandRepository extends CommonBaseRepository<{BrandModel : 
     async fecthBrand(categories:string) : Promise<IBrand[] | undefined>{
         try {
             const query = {categories :{$in:[categories]}}
-            console.log('fetchBrand',query)
             return await this.findAll('BrandModel',query)
         } catch (error:unknown) {
             console.error(error)

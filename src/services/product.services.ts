@@ -3,7 +3,8 @@ import BrandRepository from "@/repositories/entities/userRepository/brand.reposi
 import ProductRepository from "@/repositories/entities/userRepository/product.repository";
 import UserRepository from "@/repositories/entities/userRepository/user.repository";
 import { AuthorizationError, ValidationError } from "@/shared/CustomError";
-import mongoose,{ Types } from "mongoose";
+import { uploadToCloudinary } from "@/utils/cloudinaryHelper";
+import { Types } from "mongoose";
 
 
 
@@ -22,9 +23,7 @@ export default class ProductService {
            
             const existBrand = await this.brandRepository.findOne('BrandModel',{brandName:data.brand})
             if(!existBrand) throw  new ValidationError(`Brand dosn't exist`)  // * check brand exist or not
-            console.log(existBrand,'exitBrand')
             if(!existBrand.categories.includes(data.category)) throw new ValidationError(`Category dosn't exist`)
-            console.log(data,'Product')
             data.addedBy = new Types.ObjectId(data.addedBy)
             await this.productRepository.createData('ProductModel',data)
 
@@ -33,9 +32,13 @@ export default class ProductService {
             throw error
         }
     }
-    async update(data:IProduct,userId:string) : Promise<void>{
+    async update(data:IProduct,userId:string,productImage : Express.Multer.File | undefined) : Promise<void>{
         try {
             if(String(data.addedBy)!==userId) throw new AuthorizationError('You are not authorized to update this product.')
+            if(productImage){
+                data.productImage = await uploadToCloudinary(productImage as  Express.Multer.File)
+            }
+ 
             await this.productRepository.updateById('ProductModel',String(data._id),data) 
         } catch (error) {
             console.error(error)
@@ -46,6 +49,7 @@ export default class ProductService {
         try {
             const productData = await this.productRepository.findById('ProductModel',productId)
             if(!productData) throw new ValidationError(`Product doesn't exist`)
+  
             if(String(productData?.addedBy) !==userId) throw new AuthorizationError('You are not authorized to delete this product.')
             await this.productRepository.deleteById('ProductModel',productId)
         } catch (error) {
@@ -69,8 +73,10 @@ export default class ProductService {
     userId: string;
 }) {
     try {
+
         let matchStage: { [key: string]: any } = {};
         const userData = await this.userRepository.findById('UserModel', userId);
+
         const blockUsers: Types.ObjectId[] = userData?.blockedUsers || [];
 
         // **Filtering Conditions**
@@ -80,16 +86,17 @@ export default class ProductService {
         if (productName) {
             matchStage.productName = { $regex: new RegExp(productName, 'i') }; // Case-insensitive search
         }
+       
         if (brand) {
-            matchStage.brand = new Types.ObjectId(brand);
+            matchStage.brand = brand;
         }
+
         if (category) {
             matchStage.category = category;
         }
 
         // *Blocking Users
         matchStage.addedBy = { $nin: blockUsers };
-
         // *Sorting Stage
         let sortStage: { [key: string]: 1 | -1 } = {};
         if (order === 'acc') {

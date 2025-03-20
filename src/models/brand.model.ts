@@ -7,8 +7,8 @@ export interface IBrand extends Document {
 }
 
 const brandSchema = new Schema<IBrand>({
-  brandName: { type: String, required: true, unique: true },
-  brandLogo: { type: String },
+  brandName: { type: String, required: true, unique: true,trim:true },
+  brandLogo: { type: String, required: true, trim:true},
   categories: [{ type: String, required: true }]
 }, { timestamps: true });
 

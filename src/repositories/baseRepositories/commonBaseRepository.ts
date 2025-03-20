@@ -1,7 +1,6 @@
-import { Model, Document, FilterQuery, Query, UpdateQuery } from "mongoose";
+import { Model, Document, FilterQuery, Query, UpdateQuery,Types } from "mongoose";
 
-import bcrypt from "bcryptjs";
-import { ConflictError } from "@/shared/CustomError";
+
 
 export default class CommonBaseRepository<TModels extends Record<string, Document>> {
 
@@ -16,7 +15,7 @@ export default class CommonBaseRepository<TModels extends Record<string, Documen
             const model = this.models[modelName];
             if (!model) throw new Error(`Model ${String(modelName)} not found`);
         
-            return model.findById(id);
+            return model.findById(new Types.ObjectId(id));
         } catch (error) {
             console.error(error)
             throw error
@@ -66,8 +65,8 @@ export default class CommonBaseRepository<TModels extends Record<string, Documen
         try {      
             const model = this.models[modelName];
             if (!model) throw new Error(`Model ${String(modelName)} not found`);
-        
-            return model.findByIdAndUpdate(id, data, { new: true }).exec();
+            const objectId = Types.ObjectId.isValid(id) ? new Types.ObjectId(id) : id;
+            return model.findByIdAndUpdate(objectId, data, { new: true }).exec();
         } catch (error) {
             console.error(error)
             throw error
