@@ -1,7 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { JWT_SECRET } from '../utils/constants'
-import { AuthenticatedRequest } from '@/shared/CustomeRequest'
-import { AuthenticationError, AuthorizationError } from '@/shared/CustomError'
+import { AuthenticationError, AuthorizationError } from '../shared/CustomError'
 
 export class JwtService {
     async createToken(user: Object | undefined, role: string): Promise<string | undefined>{

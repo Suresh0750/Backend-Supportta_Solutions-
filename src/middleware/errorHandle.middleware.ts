@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { HttpStatus } from '@/shared/HttpStatusCode';
+import { HttpStatus } from '../shared/HttpStatusCode';
 
 export class AppError extends Error {
     public readonly statusCode: number;

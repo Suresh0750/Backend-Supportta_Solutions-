@@ -1,9 +1,9 @@
 
-import ProductController from "@/controllers/product.controller";
-import ProductRepository from "@/repositories/entities/userRepository/product.repository";
-import ProductService from "@/services/product.services";
-import BrandRepository from "@/repositories/entities/userRepository/brand.repository";
-import UserRepository from "@/repositories/entities/userRepository/user.repository";
+import ProductController from "../controllers/product.controller";
+import ProductRepository from "../repositories/entities/userRepository/product.repository";
+import ProductService from "../services/product.services";
+import BrandRepository from "../repositories/entities/userRepository/brand.repository";
+import UserRepository from "../repositories/entities/userRepository/user.repository";
 
 
 const productRepository = new ProductRepository()

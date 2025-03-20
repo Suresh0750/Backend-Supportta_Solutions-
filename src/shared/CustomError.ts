@@ -1,4 +1,4 @@
-import { HttpStatus } from "@/shared/HttpStatusCode";
+import { HttpStatus } from "./HttpStatusCode";
 
 export default class CustomError extends Error {
     public statusCode: HttpStatus;

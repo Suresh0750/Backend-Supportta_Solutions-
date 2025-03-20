@@ -1,11 +1,11 @@
 import express from "express";
-import { userController } from "@/DIP/user.dip"; 
-import { loginValidator } from "@/middleware/validators/user/loginValidators";
-import { signupValidator } from "@/middleware/validators/user/signupValidators";
-import { upload } from "@/middleware/multer";
-import authenticateToken from "@/middleware/authenticateToken";
-import { Role } from "@/utils/constants";
-import { authorizeRole } from "@/middleware/roleMiddleware";
+import { userController } from "../DIP/user.dip"; 
+import { loginValidator } from "../middleware/validators/user/loginValidators";
+import { signupValidator } from "../middleware/validators/user/signupValidators";
+import { upload } from "../middleware/multer";
+import authenticateToken from "../middleware/authenticateToken";
+import { Role } from "../utils/constants";
+import { authorizeRole } from "../middleware/roleMiddleware";
 
 const userRouter = express.Router()
 

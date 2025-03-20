@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { productController } from "@/DIP/product.dip";
-import authenticateToken from "@/middleware/authenticateToken";
-import { authorizeRole } from "@/middleware/roleMiddleware";
-import { Role } from "@/utils/constants";
-import { upload } from "@/middleware/multer";
-import { validateProduct } from "@/middleware/productValidation";
+import { productController } from "../DIP/product.dip";
+import authenticateToken from "../middleware/authenticateToken";
+import { authorizeRole } from "../middleware/roleMiddleware";
+import { Role } from "../utils/constants";
+import { upload } from "../middleware/multer";
+import { validateProduct } from "../middleware/productValidation";
 const productRouter = Router()
 
 

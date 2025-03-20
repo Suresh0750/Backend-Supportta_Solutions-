@@ -1,6 +1,6 @@
-import { IBrand } from "@/models/brand.model";
-import BrandRepository from "@/repositories/entities/userRepository/brand.repository";
-import { uploadToCloudinary } from "@/utils/cloudinaryHelper";
+import { IBrand } from "../models/brand.model";
+import BrandRepository from "../repositories/entities/userRepository/brand.repository";
+import { uploadToCloudinary } from "../utils/cloudinaryHelper";
 
 
 

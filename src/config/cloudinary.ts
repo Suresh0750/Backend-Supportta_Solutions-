@@ -1,4 +1,4 @@
-import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } from '@/utils/constants';
+import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } from '../utils/constants';
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({

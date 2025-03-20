@@ -1,6 +1,6 @@
-import CommonBaseRepository from "@/repositories/baseRepositories/commonBaseRepository";
-import UserModel ,{ IUser } from "@/models/user.model";
-import { IUserMethods } from "@/interface/users/user.interface";
+import CommonBaseRepository from "../../../repositories/baseRepositories/commonBaseRepository";
+import UserModel ,{ IUser } from "../../../models/user.model";
+import { IUserMethods } from "../../../interface/users/user.interface";
 
 
 export default class UserRepository extends CommonBaseRepository<{UserModel:IUser}> implements IUserMethods{

@@ -1,5 +1,5 @@
-import ProductModel, { IProduct } from "@/models/Product.model";
-import CommonBaseRepository from "@/repositories/baseRepositories/commonBaseRepository";
+import ProductModel, { IProduct } from "../../../models/Product.model";
+import CommonBaseRepository from "../../../repositories/baseRepositories/commonBaseRepository";
 
 
 

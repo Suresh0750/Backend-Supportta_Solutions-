@@ -1,5 +1,5 @@
 
-import { ValidationError } from "@/shared/CustomError";
+import { ValidationError } from "../../shared/CustomError";
 import { Request, Response, NextFunction } from "express";
 import validator from "validator";
 

@@ -1,10 +1,10 @@
 
-import { IUser } from "@/models/user.model"
-import UserRepository from "@/repositories/entities/userRepository/user.repository"
-import { AuthenticationError, NotFoundError, ValidationError } from "@/shared/CustomError"
-import { uploadToCloudinary } from "@/utils/cloudinaryHelper"
+import { IUser } from "../models/user.model"
+import UserRepository from "../repositories/entities/userRepository/user.repository"
+import { AuthenticationError, NotFoundError, ValidationError } from "../shared/CustomError"
+import { uploadToCloudinary } from "../utils/cloudinaryHelper"
 import mongoose, { Types } from "mongoose"
-import bcrypt from "node_modules/bcryptjs"
+import bcrypt from "bcryptjs"
 
 const ObjectId = Types.ObjectId
 export default class UserServices{

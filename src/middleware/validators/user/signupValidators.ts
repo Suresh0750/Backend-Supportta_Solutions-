@@ -1,5 +1,5 @@
-import { ValidationError } from "@/shared/CustomError";
-import { passwordRegex } from "@/utils/constants";
+import { ValidationError } from "../../../shared/CustomError";
+import { passwordRegex } from "../../../utils/constants";
 import { NextFunction, Request, Response } from "express";
 import validator from "validator";
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import validator from "validator";
-import { ValidationError } from "@/shared/CustomError"; 
+import { ValidationError } from "../../shared/CustomError"; 
 
 export const validateProduct = (req: Request, res: Response, next: NextFunction) => {
     try {

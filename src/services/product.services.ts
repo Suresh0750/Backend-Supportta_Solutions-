@@ -1,9 +1,9 @@
-import { IProduct } from "@/models/Product.model";
-import BrandRepository from "@/repositories/entities/userRepository/brand.repository";
-import ProductRepository from "@/repositories/entities/userRepository/product.repository";
-import UserRepository from "@/repositories/entities/userRepository/user.repository";
-import { AuthorizationError, ValidationError } from "@/shared/CustomError";
-import { uploadToCloudinary } from "@/utils/cloudinaryHelper";
+import { IProduct } from "../models/Product.model";
+import BrandRepository from "../repositories/entities/userRepository/brand.repository";
+import ProductRepository from "../repositories/entities/userRepository/product.repository";
+import UserRepository from "../repositories/entities/userRepository/user.repository";
+import { AuthorizationError, ValidationError } from "../shared/CustomError";
+import { uploadToCloudinary } from "../utils/cloudinaryHelper";
 import { Types } from "mongoose";
 
 

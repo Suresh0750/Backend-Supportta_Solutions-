@@ -1,14 +1,13 @@
 
-import UserServices from "@/services/user.services"
-import { JwtService } from "@/integration/jwt"
+import UserServices from "../services/user.services"
+import { JwtService } from "../integration/jwt"
 import { NextFunction,Request,Response } from "express"
-import { SuccessResponse } from "@/shared/ApiResponse"
-import { HttpStatus } from "@/shared/HttpStatusCode"
-import { Role, Token } from "@/utils/constants"
-import { AuthorizationError, ValidationError } from "@/shared/CustomError"
+import { SuccessResponse } from "../shared/ApiResponse"
+import { HttpStatus } from "../shared/HttpStatusCode"
+import { Role, Token } from "../utils/constants"
+import { AuthorizationError, ValidationError } from "../shared/CustomError"
 import mongoose from "mongoose"
-import { JwtPayload } from "jsonwebtoken"
-import { AuthenticatedRequest } from "@/shared/CustomeRequest"
+import { AuthenticatedRequest } from "../shared/CustomeRequest"
 
 
 

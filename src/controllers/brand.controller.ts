@@ -1,9 +1,9 @@
-import BrandService from "@/services/brand.services";
-import { SuccessResponse } from "@/shared/ApiResponse";
-import { ValidationError } from "@/shared/CustomError";
-import { HttpStatus } from "@/shared/HttpStatusCode";
+import BrandService from "../services/brand.services";
+import { SuccessResponse } from "../shared/ApiResponse";
+import { ValidationError } from "../shared/CustomError";
+import { HttpStatus } from "../shared/HttpStatusCode";
 import {Request,Response, NextFunction } from "express";
-import { AuthenticatedRequest } from "@/shared/CustomeRequest";
+import { AuthenticatedRequest } from "../shared/CustomeRequest";
 
 
 

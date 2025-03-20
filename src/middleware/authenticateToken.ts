@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { NextFunction, Response } from 'express';
 import { JWT_SECRET } from '../utils/constants';
-import { AuthenticatedRequest } from '@/shared/CustomeRequest';
+import { AuthenticatedRequest } from '../shared/CustomeRequest';
 import { Token } from '../utils/constants';
-import { HttpStatus } from '@/shared/HttpStatusCode';
+import { HttpStatus } from '../shared/HttpStatusCode';
 
 const authenticateToken = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<any> => {
 

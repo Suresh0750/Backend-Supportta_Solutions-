@@ -1,11 +1,11 @@
 
 import { Router } from "express";
-import { brandController } from "@/DIP/brand.dip";
-import authenticateToken from "@/middleware/authenticateToken";
-import { authorizeRole } from "@/middleware/roleMiddleware";
-import { Role } from "@/utils/constants";
-import { validateBrand } from "@/middleware/validators/brandValidation";
-import { upload } from "@/middleware/multer";
+import { brandController } from "../DIP/brand.dip";
+import authenticateToken from "../middleware/authenticateToken";
+import { authorizeRole } from "../middleware/roleMiddleware";
+import { Role } from "../utils/constants";
+import { validateBrand } from "../middleware/validators/brandValidation";
+import { upload } from "../middleware/multer";
 
 
 

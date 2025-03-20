@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
-import { AuthenticatedRequest } from '@/shared/CustomeRequest';
-import { HttpStatus } from '@/shared/HttpStatusCode';
+import { AuthenticatedRequest } from '../shared/CustomeRequest';
+import { HttpStatus } from '../shared/HttpStatusCode';
 
 export const authorizeRole = (requiredRoles: string[]) => {
     return (req: AuthenticatedRequest, res: Response, next: NextFunction):void => {

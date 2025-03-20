@@ -1,8 +1,8 @@
-import ProductService from "@/services/product.services";
-import { SuccessResponse } from "@/shared/ApiResponse";
-import { AuthenticatedRequest } from "@/shared/CustomeRequest";
-import { AuthenticationError } from "@/shared/CustomError";
-import { HttpStatus } from "@/shared/HttpStatusCode";
+import ProductService from "../services/product.services";
+import { SuccessResponse } from "../shared/ApiResponse";
+import { AuthenticatedRequest } from "../shared/CustomeRequest";
+import { AuthenticationError } from "../shared/CustomError";
+import { HttpStatus } from "../shared/HttpStatusCode";
 import { NextFunction,Response} from "express";
 
 

@@ -1,7 +1,7 @@
-import CommonBaseRepository from "@/repositories/baseRepositories/commonBaseRepository";
+import CommonBaseRepository from "../../../repositories/baseRepositories/commonBaseRepository";
 
-import BrandModel, { IBrand } from "@/models/brand.model";
-import { ConflictError } from "@/shared/CustomError";
+import BrandModel, { IBrand } from "../../../models/brand.model";
+import { ConflictError } from "../../../shared/CustomError";
 
 
 export default class BrandRepository extends CommonBaseRepository<{BrandModel : IBrand}>{
